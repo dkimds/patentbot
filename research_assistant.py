@@ -3,10 +3,11 @@ from pydantic import BaseModel, Field
 from typing import Annotated, List
 from typing_extensions import TypedDict
 
-from langchain_community.document_loaders import WikipediaLoader
+from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, get_buffer_string
-from langchain_openai import ChatOpenAI
+from langchain_core.vectorstores import InMemoryVectorStore
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
 from langgraph.constants import Send
 from langgraph.graph import END, MessagesState, START, StateGraph
@@ -178,17 +179,22 @@ def search_web(state: InterviewState):
 
     return {"context": [formatted_search_docs]} 
 
-def search_wikipedia(state: InterviewState):
+def search_paper(state: InterviewState):
     
-    """ Retrieve docs from wikipedia """
+    """ Retrieve docs from a PDF paper """
 
     # Search query
     structured_llm = llm.with_structured_output(SearchQuery)
     search_query = structured_llm.invoke([search_instructions]+state['messages'])
     
-    # Search
-    search_docs = WikipediaLoader(query=search_query.search_query, 
-                                  load_max_docs=2).load()
+    # Load and search 
+    pdf_loader = PyPDFLoader(file_path="./layout-parser-paper.pdf")
+    pages = []
+    for page in pdf_loader.lazy_load():
+        pages.append(page)  
+    vector_store = InMemoryVectorStore.from_documents(pages, OpenAIEmbeddings())
+
+    search_docs = vector_store.similarity_search(search_query.search_query, k=2)
 
      # Format
     formatted_search_docs = "\n\n---\n\n".join(
@@ -359,7 +365,7 @@ def write_section(state: InterviewState):
 interview_builder = StateGraph(InterviewState)
 interview_builder.add_node("ask_question", generate_question)
 interview_builder.add_node("search_web", search_web)
-interview_builder.add_node("search_wikipedia", search_wikipedia)
+interview_builder.add_node("search_paper", search_paper)
 interview_builder.add_node("answer_question", generate_answer)
 interview_builder.add_node("save_interview", save_interview)
 interview_builder.add_node("write_section", write_section)
@@ -367,9 +373,9 @@ interview_builder.add_node("write_section", write_section)
 # Flow
 interview_builder.add_edge(START, "ask_question")
 interview_builder.add_edge("ask_question", "search_web")
-interview_builder.add_edge("ask_question", "search_wikipedia")
+interview_builder.add_edge("ask_question", "search_paper")
 interview_builder.add_edge("search_web", "answer_question")
-interview_builder.add_edge("search_wikipedia", "answer_question")
+interview_builder.add_edge("search_paper", "answer_question")
 interview_builder.add_conditional_edges("answer_question", route_messages,['ask_question','save_interview'])
 interview_builder.add_edge("save_interview", "write_section")
 interview_builder.add_edge("write_section", END)
@@ -543,4 +549,4 @@ builder.add_edge(["write_conclusion", "write_report", "write_introduction"], "fi
 builder.add_edge("finalize_report", END)
 
 # Compile
-graph = builder.compile(interrupt_before=['human_feedback'])
+graph = builder.compile(interrupt_before=['human_feedback'])        
