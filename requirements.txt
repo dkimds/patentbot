@@ -9,3 +9,4 @@ notebook
 tavily-python
 trustcall
 langgraph-cli[inmem]
+pypdf
