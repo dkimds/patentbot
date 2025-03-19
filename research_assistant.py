@@ -535,29 +535,6 @@ def finalize_report(state: ResearchGraphState):
         final_report += "\n\n## Sources\n" + sources
     return {"final_report": final_report}
 
-# Translate the final report
-translate_instructions = """You are a professional translator. 
-
-Your task is to translate the following report into {target_language}.
-
-Here is the report to translate:
-
-{report}"""
-
-def translate_report(state: ResearchGraphState, target_language: str = "Korean"):
-    
-    """ Node to translate the final report """
-
-    # Get the final report
-    final_report = state["final_report"]
-
-    # Translate the report
-    system_message = translate_instructions.format(target_language=target_language, report=final_report)
-    translated_report = llm.invoke([SystemMessage(content=system_message)]+[HumanMessage(content="Translate the report.")])
-    
-    # Save the translated report
-    return {"translated_report": translated_report.content}
-
 # Add nodes and edges 
 builder = StateGraph(ResearchGraphState)
 builder.add_node("create_analysts", create_analysts)
@@ -567,7 +544,6 @@ builder.add_node("write_report",write_report)
 builder.add_node("write_introduction",write_introduction)
 builder.add_node("write_conclusion",write_conclusion)
 builder.add_node("finalize_report",finalize_report)
-builder.add_node("translate_report", translate_report)
 
 # Logic
 builder.add_edge(START, "create_analysts")
@@ -577,8 +553,60 @@ builder.add_edge("conduct_interview", "write_report")
 builder.add_edge("conduct_interview", "write_introduction")
 builder.add_edge("conduct_interview", "write_conclusion")
 builder.add_edge(["write_conclusion", "write_report", "write_introduction"], "finalize_report")
-builder.add_edge("finalize_report", "translate_report")
 builder.add_edge("finalize_report", END)
 
 # Compile
-graph = builder.compile(interrupt_before=['human_feedback'])        
+memory = MemorySaver()
+graph = builder.compile(interrupt_before=['human_feedback'], checkpointer=memory)     
+
+def main():
+    # Inputs
+    max_analysts = 3 
+    topic = "The possibility of the patent being registered"
+    thread = {"configurable": {"thread_id": "1"}}
+
+    # Run the graph until the first interruption
+    for event in graph.stream({"topic":topic,
+                            "max_analysts":max_analysts}, 
+                            thread, 
+                            stream_mode="values"):
+        
+        analysts = event.get('analysts', '')
+        if analysts:
+            for analyst in analysts:
+                print(f"Name: {analyst.name}")
+                print(f"Affiliation: {analyst.affiliation}")
+                print(f"Role: {analyst.role}")
+                print(f"Description: {analyst.description}")
+                print("-" * 50) 
+
+    # We now update the state as if we are the human_feedback node
+    graph.update_state(thread, {"human_analyst_feedback": "Add in the CEO of gen ai native startup"}, as_node="human_feedback")
+
+    # Check
+    for event in graph.stream(None, thread, stream_mode="values"):
+        analysts = event.get('analysts', '')
+        if analysts:
+            for analyst in analysts:
+                print(f"Name: {analyst.name}")
+                print(f"Affiliation: {analyst.affiliation}")
+                print(f"Role: {analyst.role}")
+                print(f"Description: {analyst.description}")
+                print("-" * 50)      
+
+    # Confirm we are happy
+    graph.update_state(thread, {"human_analyst_feedback": None}, as_node="human_feedback")
+    
+    # Continue
+    for event in graph.stream(None, thread, stream_mode="updates"):
+        print("--Node--")
+        node_name = next(iter(event.keys()))
+        print(node_name)
+
+    final_state = graph.get_state(thread)
+    report = final_state.values.get('final_report')
+    print("Final report" + "-" * 50)   
+    print(report)
+
+if __name__ == "__main__":
+    main()
