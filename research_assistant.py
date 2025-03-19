@@ -11,10 +11,17 @@ from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
 from langgraph.constants import Send
 from langgraph.graph import END, MessagesState, START, StateGraph
+from langgraph.checkpoint.memory import MemorySaver
+
+import os
+from dotenv import load_dotenv
+load_dotenv()
+openai_api_key = os.getenv("OPENAI_API_KEY")
+tavily_api_key = os.getenv("TAVILY_API_KEY")
 
 ### LLM
 
-llm = ChatOpenAI(model="gpt-4o", temperature=0) 
+llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, openai_api_key=openai_api_key) 
 
 ### Schema 
 
@@ -160,7 +167,7 @@ def search_web(state: InterviewState):
     """ Retrieve docs from web search """
 
     # Search
-    tavily_search = TavilySearchResults(max_results=3)
+    tavily_search = TavilySearchResults(max_results=3, api_key=tavily_api_key)
 
     # Search query
     structured_llm = llm.with_structured_output(SearchQuery)
