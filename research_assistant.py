@@ -195,7 +195,7 @@ def search_paper(state: InterviewState):
     search_query = structured_llm.invoke([search_instructions]+state['messages'])
     
     # Load and search 
-    pdf_loader = PyPDFLoader(file_path="./layout-parser-paper.pdf")
+    pdf_loader = PyPDFLoader(file_path="./1020210172384B1.pdf")
     pages = []
     for page in pdf_loader.lazy_load():
         pages.append(page)  
@@ -393,7 +393,7 @@ def initiate_all_interviews(state: ResearchGraphState):
 
     # Check if human feedback
     human_analyst_feedback=state.get('human_analyst_feedback','approve')
-    if human_analyst_feedback.lower() != 'approve':
+    if human_analyst_feedback:
         # Return to create_analysts
         return "create_analysts"
 
