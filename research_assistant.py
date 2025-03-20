@@ -15,6 +15,8 @@ from langgraph.checkpoint.memory import MemorySaver
 
 import os
 from dotenv import load_dotenv
+
+os.environ["LANGSMITH_TRACING"] = "true"
 load_dotenv()
 
 ### LLM
