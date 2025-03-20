@@ -16,13 +16,10 @@ from langgraph.checkpoint.memory import MemorySaver
 import os
 from dotenv import load_dotenv
 load_dotenv()
-openai_api_key = os.getenv("OPENAI_API_KEY")
-tavily_api_key = os.getenv("TAVILY_API_KEY")
-os.environ["LANGCHAIN_API_KEY"]= os.getenv("LANGCHAIN_API_KEY")
 
 ### LLM
 
-llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, openai_api_key=openai_api_key) 
+llm = ChatOpenAI(model="gpt-4o-mini", temperature=0) 
 
 ### Schema 
 
@@ -168,7 +165,7 @@ def search_web(state: InterviewState):
     """ Retrieve docs from web search """
 
     # Search
-    tavily_search = TavilySearchResults(max_results=3, api_key=tavily_api_key)
+    tavily_search = TavilySearchResults(max_results=3)
 
     # Search query
     structured_llm = llm.with_structured_output(SearchQuery)
