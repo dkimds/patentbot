@@ -563,7 +563,7 @@ graph = builder.compile(interrupt_before=['human_feedback'], checkpointer=memory
 def main():
     # Inputs
     max_analysts = 3 
-    topic = "The possibility of the patent being registered"
+    topic = "The benefits of adopting the following patent as a business model"
     thread = {"configurable": {"thread_id": "1"}}
 
     # Run the graph until the first interruption
