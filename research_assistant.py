@@ -582,7 +582,7 @@ def main():
                 print("-" * 50) 
 
     # We now update the state as if we are the human_feedback node
-    graph.update_state(thread, {"human_analyst_feedback": "Add in the CEO of gen ai native startup"}, as_node="human_feedback")
+    graph.update_state(thread, {"human_analyst_feedback": input("Human-in-the-loop: ")}, as_node="human_feedback")
 
     # Check
     for event in graph.stream(None, thread, stream_mode="values"):
