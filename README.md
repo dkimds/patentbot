@@ -1,18 +1,16 @@
 # patentbot
-### AI-Based Patent Evaluation Bot
+### LLM-Based Patent Evaluation Agent
 
 ## Overview
-PatentGenius는 특허의 기술적, 법적 가치를 평가하기 위한 AI 기반 특허 평가 봇입니다. Retrieval-Augmented Generation(RAG)과 감성 기반 가치 평가를 조합하여 특허의 질적 가치를 정량화합니다.
+PatentGenius는 특허의 기술적, 법적 가치를 평가하기 위한 AI 기반 특허 평가 에이전트트입니다. Retrieval-Augmented Generation(RAG)과 인터뷰 스타일 멀티에이전트 시스템을을 조합하여 특허의 질적 가치를 평가합니다.
 
 ## Features
 - **Patent Document Parsing**: PDF 및 텍스트 기반 특허 문서 업로드 및 분석
-- **RAG-based Prior Art Search**: 유사특허 검색 및 기술분류 기반 필터링
-- **Automated Value Estimation**: LLM을 통한 기술적 가치 평가
+- **Automated Value Estimation**: LLM 에이전트를를 통한 기술적 가치 평가
 - **Streamlit Web Interface**: 사용자 친화적인 웹 대시보드 제공
 
 ## Tech Stack
-- LlamaIndex
-- LangChain
+- LangGraph
 - FAISS
 - Streamlit
 
@@ -25,14 +23,12 @@ pip install -r requirements.txt
 
 ## Usage
 ```bash
-streamlit run app.py
+streamlit run research_assistant.py
 ```
 
 ## Roadmap
 - [x] 특허 문서 업로드 및 파싱
-- [x] RAG 기반 유사특허 검색
-- [ ] 멀티 에이전트 기반 기술분류 매칭
-- [ ] 감성 기반 가치 평가 모델 추가
+- [x] 멀티 에이전트 기반 기술 분석
 - [ ] vLLM 최적화 배포
 
 ## License
