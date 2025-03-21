@@ -1,3 +1,4 @@
+import streamlit as st
 import operator
 from pydantic import BaseModel, Field
 from typing import Annotated, List
@@ -195,7 +196,7 @@ def search_paper(state: InterviewState):
     search_query = structured_llm.invoke([search_instructions]+state['messages'])
     
     # Load and search 
-    pdf_loader = PyPDFLoader(file_path="./1020210172384B1.pdf")
+    pdf_loader = PyPDFLoader(file_path="./temp.pdf")
     pages = []
     for page in pdf_loader.lazy_load():
         pages.append(page)  
@@ -562,7 +563,7 @@ graph = builder.compile(interrupt_before=['human_feedback'], checkpointer=memory
 def main():
     # Inputs
     max_analysts = 3 
-    topic = "The benefits of adopting the following patent as a business model"
+    topic = text
     thread = {"configurable": {"thread_id": "1"}}
 
     # Run the graph until the first interruption
@@ -581,7 +582,9 @@ def main():
                 print("-" * 50) 
 
     # We now update the state as if we are the human_feedback node
-    graph.update_state(thread, {"human_analyst_feedback": input("Human-in-the-loop: ")}, as_node="human_feedback")
+    graph.update_state(thread, {"human_analyst_feedback": 
+                                "Add in the CEO of the startup that owns and invented the patent"}, 
+                                as_node="human_feedback")
 
     # Check
     for event in graph.stream(None, thread, stream_mode="values"):
@@ -605,8 +608,24 @@ def main():
 
     final_state = graph.get_state(thread)
     report = final_state.values.get('final_report')
-    print("Final report" + "-" * 50)   
-    print(report)
+    st.info(report)
 
-if __name__ == "__main__":
-    main()
+st.title("Patent Research Assistant")
+
+uploaded_file = st.sidebar.file_uploader("Choose a file")
+
+if uploaded_file is not None:
+    ### Upload patent ###
+    # To read file as bytes:
+    bytes_data = uploaded_file.getvalue()
+    file_path = "./temp.pdf"
+    with open(file_path, "wb") as f:
+        f.write(bytes_data)
+
+with st.form("my_form"):
+    text = st.text_area(
+        "Enter topic:",
+        "The benefits of adopting the following patent as a business model",)
+    submitted = st.form_submit_button("Submit")
+    if submitted:
+        main()
