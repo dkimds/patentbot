@@ -610,7 +610,7 @@ def main():
     report = final_state.values.get('final_report')
     st.info(report)
 
-st.title("Patent Research Assistant")
+st.title("Patent Evaluation Assistant")
 
 uploaded_file = st.sidebar.file_uploader("Choose a file")
 
