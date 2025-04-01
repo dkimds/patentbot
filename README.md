@@ -23,7 +23,7 @@ pip install -r requirements.txt
 
 ## Usage
 ```bash
-streamlit run research_assistant.py
+streamlit run evaluation_assistant.py
 ```
 
 ## Roadmap
