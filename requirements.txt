@@ -10,3 +10,4 @@ tavily-python
 trustcall
 langgraph-cli[inmem]
 pypdf
+streamlit
