@@ -29,7 +29,7 @@ streamlit run evaluation_assistant.py
 ## Roadmap
 - [x] 특허 문서 업로드 및 파싱
 - [x] 멀티 에이전트 기반 기술 분석
-- [ ] vLLM 최적화 배포
+- [ ] Model Context Protocol 
 
 ## License
 MIT License
