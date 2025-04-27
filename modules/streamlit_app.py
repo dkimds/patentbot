@@ -1,10 +1,10 @@
 import streamlit as st
 from .state_graph import graph
 
-def main(topic):
+def main(topic, count):
     # Inputs
     max_analysts = 3 
-    thread = {"configurable": {"thread_id": "1"}}
+    thread = {"configurable": {"thread_id": str(count)}}
 
     # Run the graph until the first interruption
     for event in graph.stream({"topic":topic,
