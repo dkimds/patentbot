@@ -13,13 +13,13 @@ def main(topic, count):
                             stream_mode="values"):
         
         analysts = event.get('analysts', '')
-        # if analysts:
-        #     for analyst in analysts:
-        #         print(f"Name: {analyst.name}")
-        #         print(f"Affiliation: {analyst.affiliation}")
-        #         print(f"Role: {analyst.role}")
-        #         print(f"Description: {analyst.description}")
-        #         print("-" * 50)
+        if analysts:
+            for analyst in analysts:
+                print(f"Name: {analyst.name}")
+                print(f"Affiliation: {analyst.affiliation}")
+                print(f"Role: {analyst.role}")
+                print(f"Description: {analyst.description}")
+                print("-" * 50)
 
     # We now update the state as if we are the human_feedback node
     graph.update_state(thread, {"human_analyst_feedback": 
@@ -29,13 +29,13 @@ def main(topic, count):
     # Check
     for event in graph.stream(None, thread, stream_mode="values"):
         analysts = event.get('analysts', '')
-        # if analysts:
-        #     for analyst in analysts:
-        #         print(f"Name: {analyst.name}")
-        #         print(f"Affiliation: {analyst.affiliation}")
-        #         print(f"Role: {analyst.role}")
-        #         print(f"Description: {analyst.description}")
-        #         print("-" * 50)      
+        if analysts:
+            for analyst in analysts:
+                print(f"Name: {analyst.name}")
+                print(f"Affiliation: {analyst.affiliation}")
+                print(f"Role: {analyst.role}")
+                print(f"Description: {analyst.description}")
+                print("-" * 50)      
 
     # Confirm we are happy
     graph.update_state(thread, {"human_analyst_feedback": None}, as_node="human_feedback")
