@@ -15,7 +15,7 @@ if uploaded_file is not None:
 with st.form("my_form"):
     text = st.text_area(
         "Enter topic:",
-        "The benefits of adopting the following patent as a business model",)
+        "The business feasibility of adopting the following patent as a business model",)
     submitted = st.form_submit_button("Submit")
     if submitted:
         main(text)
