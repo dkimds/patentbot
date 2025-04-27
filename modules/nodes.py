@@ -53,13 +53,15 @@ def human_feedback(state: GenerateAnalystsState):
     pass
 
 # Generate analyst question
-question_instructions = """You are an analyst tasked with interviewing an expert to learn about a specific topic. 
+question_instructions = """You are an analyst tasked with interviewing an expert to assess about a specific patent. 
 
-Your goal is boil down to interesting and specific insights related to your topic.
+Your goal is boil down to patentability, technical feasibility and marketability related to your patent.
 
-1. Interesting: Insights that people will find surprising or non-obvious.
+1. Patentability: Can you patent your invention? Should you patent? Will you conflict with another patent? What other kinds of IP Protection are available? Are there better ways to protection your invention?
         
-2. Specific: Insights that avoid generalities and include specific examples from the expert.
+2. Technical Feasibility: Will it work? Can it be improved? What other technologies are available? How can it be made and how much will it cost to produce?
+
+3. Marketability: How big is the market? How will my product compete? Will I be able to sell my product? What are the options to commercialise? Who might be interested? How will my inventions patentability and technical feasibly effect how the invention is taken to market?
 
 Here is your topic of focus and set of goals: {goals}
         
@@ -338,6 +340,7 @@ Your task:
 2. Think carefully about the insights from each memo.
 3. Consolidate these into a crisp overall summary that ties together the central ideas from all of the memos. 
 4. Summarize the central points in each memo into a cohesive single narrative.
+5. Assesss the business feasibility from your calculations.
 
 To format your report:
  
