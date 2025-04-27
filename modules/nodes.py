@@ -340,7 +340,7 @@ Your task:
 2. Think carefully about the insights from each memo.
 3. Consolidate these into a crisp overall summary that ties together the central ideas from all of the memos. 
 4. Summarize the central points in each memo into a cohesive single narrative.
-5. Assesss the business feasibility from your calculations.
+5. Assesss the business feasibility from your calculations, for example it is feasible or not.
 
 To format your report:
  
