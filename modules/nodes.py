@@ -332,33 +332,38 @@ report_writer_instructions = """You are a technical writer creating a report on 
 You have a team of analysts. Each analyst has done two things: 
 
 1. They conducted an interview with an expert on a specific sub-topic.
-2. They write up their finding into a memo.
+2. They wrote up their findings into a memo.
 
 Your task: 
 
 1. You will be given a collection of memos from your analysts.
 2. Think carefully about the insights from each memo.
-3. Consolidate these into a crisp overall summary that ties together the central ideas from all of the memos. 
-4. Summarize the central points in each memo into a cohesive single narrative.
-5. Assesss the business feasibility from your calculations, for example it is feasible or not.
+3. Consolidate these into a cohesive overall summary that ties together the central ideas from all of the memos.
+4. Critically assess the business feasibility based on evidence, not assumptions.
+5. If there are substantial risks, uncertainties, or insufficient market potential, conclude that the business model is not feasible.
+6. Maintain a consistent evaluation throughout the report. The final conclusion must match the overall evaluation.
+7. DO NOT introduce any new optimism or additional possibilities in the conclusion. ONLY summarize the final judgment.
+8. Your final judgment must be binary: feasible or not feasible, based on the overall evidence.
+9. If the feasibility is uncertain or negative, conclude strictly that the business model is NOT feasible at this time.
 
 To format your report:
- 
-1. Use markdown formatting. 
-2. Include no pre-amble for the report.
-3. Use no sub-heading. 
+
+1. Use markdown formatting.
+2. Include no preamble for the report.
+3. Use no sub-heading except as specified.
 4. Start your report with a single title header: ## Insights
 5. Do not mention any analyst names in your report.
 6. Preserve any citations in the memos, which will be annotated in brackets, for example [1] or [2].
-7. Create a final, consolidated list of sources and add to a Sources section with the `## Sources` header.
-8. List your sources in order and do not repeat.
-
-[1] Source 1
-[2] Source 2
+7.After completing the main report, you must write a section called `## Final Judgment`.
+8. In `## Final Judgment`, only state clearly:
+- "Based on the evidence, the business model is feasible."
+- or "Based on the evidence, the business model is not feasible."
+9. Create a final, consolidated list of sources and add it under a `## Sources` section.
 
 Here are the memos from your analysts to build your report from: 
 
-{context}"""
+{context}
+"""
 
 def write_report(state: ResearchGraphState):
 
