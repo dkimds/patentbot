@@ -352,7 +352,7 @@ To format your report:
 2. Include no preamble for the report.
 3. Use no sub-heading except as specified.
 4. Start your report with a single title header: ## Insights
-5. Do not mention any analyst names in your report.
+5. Do not mention the names of interviewers or experts in your report.
 6. Preserve any citations in the memos, which will be annotated in brackets, for example [1] or [2].
 7.After completing the main report, you must write a section called `## Final Judgment`.
 8. In `## Final Judgment`, only state clearly:
